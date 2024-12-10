@@ -29,6 +29,7 @@
 //! }
 //! ```
 use std::fmt::{Debug, Formatter};
+use figures::units::Lp;
 use cushy::figures::units::Px;
 use cushy::widget::{MakeWidget, WidgetRef, WrapperWidget};
 use cushy::widgets::Space;
@@ -90,8 +91,6 @@ impl TreeNodeWidget {
             .into_columns()
             .and(children_switcher)
             .into_rows()
-            // FIXME remove container, just for tree right now.
-            .contain()
             .into_ref();
 
         Self {
@@ -229,12 +228,13 @@ impl Tree {
 
             let children: WidgetList = self.children_keys(&parent_key)
                 .into_iter()
-                .enumerate()
-                .map(|(index, key)| {
+                .map(|key| {
                     let nodes = self.nodes.lock();
                     let node = nodes.get(&key).unwrap();
 
-                    index.into_label().make_widget()
+                    let indent = Space::default().width(Lp::new(5));
+
+                    indent
                         .and(node.child_widget.clone())
                         .into_columns()
                         .make_widget()
