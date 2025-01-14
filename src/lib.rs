@@ -400,8 +400,7 @@ fn initialize_tracing() {
                     .with_default(MAX_LEVEL)
                     .with_target("winit", Level::ERROR)
                     .with_target("wgpu", Level::ERROR)
-                    .with_target("naga", Level::ERROR)
-                    .with_default(MAX_LEVEL),
+                    .with_target("naga", Level::ERROR),
             )
             .try_init();
     }
