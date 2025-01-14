@@ -34,7 +34,11 @@ fn main() -> cushy::Result {
     let duration_label = duration.map_each(|duration| format!("{}s", duration.as_secs_f32()));
 
     elapsed
-        .progress_bar_between(duration.map_each_cloned(|duration| Duration::ZERO..=duration))
+        .progress_bar_between(
+            duration
+                .weak_clone()
+                .map_each_cloned(|duration| Duration::ZERO..=duration),
+        )
         .fit_horizontally()
         .and(duration_label)
         .and(
@@ -61,7 +65,7 @@ fn main() -> cushy::Result {
 fn spawn_timer(timer: &Dynamic<Timer>) -> DynamicReader<Duration> {
     let timer = timer.create_reader();
     let elapsed = Dynamic::new(timer.map_ref(|timer| timer.duration));
-    let elapsed_reader = elapsed.create_reader();
+    let elapsed_reader = elapsed.weak_clone().into_reader();
     std::thread::spawn(move || loop {
         let settings = timer.get();
 
