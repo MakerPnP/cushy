@@ -2512,8 +2512,18 @@ where
     }
 }
 
-/// Allows to convert collections or iterators directly into [`Stack`],
-/// [`Layers`], etc.
+/// Allows to convert collections or iterators directly into [`Stack`], [`Layers`], etc.
+///
+/// ```
+/// use cushy::widget::{IntoWidgetList, MakeWidget};
+///
+/// vec!["hello", "label"].into_rows();
+///
+/// vec!["hello", "button"]
+///     .into_iter()
+///     .map(|l| l.into_button())
+///     .into_columns();
+/// ```
 pub trait MakeWidgetList: Sized {
     /// Returns self as a `WidgetList`.
     fn make_widget_list(self) -> WidgetList;
